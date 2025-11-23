@@ -2,9 +2,11 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+
 @dataclass
 class Cell:
-    # kind: "blank" (user enters number), "op", "result", "block", "given"
+    # kind: "blank" (user digit), "op" (+,-,x,=), "result" (fixed total),
+    #       "given" (fixed digit 7), "block" (dark green)
     kind: str
     value: Optional[str] = None
 
@@ -12,8 +14,7 @@ class Cell:
 ROWS = 7
 COLS = 7
 
-# Grid layout taken from the book image (7x7)
-# Row/col indices are 0-based.
+# 7x7 grid exactly matching the book
 GRID: List[List[Cell]] = [
     # row 0:  _  +  _  x  7  =  35
     [
@@ -45,14 +46,14 @@ GRID: List[List[Cell]] = [
         Cell("op", "="),
         Cell("result", "12"),
     ],
-    # row 3:  -  ■  x  ■  +  _  ■
+    # row 3:  -  ■  x  ■  +  ■  ■
     [
         Cell("op", "-"),
         Cell("block"),
         Cell("op", "x"),
         Cell("block"),
         Cell("op", "+"),
-        Cell("blank"),
+        Cell("block"),
         Cell("block"),
     ],
     # row 4:  _  x  _  +  _  =  24
@@ -85,12 +86,4 @@ GRID: List[List[Cell]] = [
         Cell("block"),
         Cell("block"),
     ],
-]
-
-# Convenience: list of all editable number cells (excluding the fixed 7)
-VARIABLE_CELLS = [
-    (r, c)
-    for r in range(ROWS)
-    for c in range(COLS)
-    if GRID[r][c].kind == "blank"
 ]
